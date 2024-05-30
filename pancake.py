@@ -1,53 +1,55 @@
+import sys
+
 def flip(arr, i):
-    start = 0
-    while start < i:
-        arr[start], arr[i] = arr[i], arr[start]
-        start += 1
-        i -= 1
+   arr[:i] = arr[:i][::-1]
 
-def find_max(arr, n):
-    mi = 0
-    for i in range(1, n):
-        if arr[i] > arr[mi]:
-            mi = i
-    return mi
+def maximo(arr, n):
+   max = 0
+   for i in range(1, n):
+       if arr[i] > arr[max]:
+           max = i
+   return max
 
-def pancake_sort(arr):
-    flips = []
-    n = len(arr)
-    for curr_size in range(n, 1, -1):
-        mi = find_max(arr, curr_size)
-        if mi!= curr_size - 1:
-            if mi!= 0:
-                flip(arr, mi)
-                flips.append(mi + 1)  # 1-based index
-            flip(arr, curr_size - 1)
-            flips.append(curr_size)  # 1-based index
-    flips.append(0)  # To mark the end of the sequence
-    return flips
+def pancake(arr):
+   n = len(arr)
+   flips = []
+   
+   if arr == list(range(n, 0, -1)):
+       flip(arr, n)
+       return [0] 
+
+   for tam in range(n, 1, -1):
+       max = maximo(arr, tam)
+       
+       if max != tam - 1:
+           if max != 0:
+               flip(arr, max + 1)
+               flips.append(max + 1)
+           
+           flip(arr, tam)
+           flips.append(tam)
+   
+   if not flips:
+       return ["ORDENADO"]
+   else:
+       flips.append(0)
+   return flips
 
 def main():
-    num_cases = int(input())
-    results = []
-
-    for _ in range(num_cases):
-        pancakes = list(map(int, input().split()))
-        if pancakes == sorted(pancakes, reverse=True):
-            results.append("ORDENADO")
-        else:
-            flips = pancake_sort(pancakes)
-            results.append(" ".join(map(str, flips)))
-
-    for result in results:
-        print(result)
+   input = sys.stdin.read
+   data = input().splitlines()
+   
+   casos = int(data[0])
+   ordenado = []
+   
+   for i in range(1, casos + 1):
+       pancakes = list(map(int, data[i].split()))
+       resp = pancake(pancakes)
+       ordenado.append(" ".join(map(str, resp)) if isinstance(resp, list) else resp)
+   
+   for resp in ordenado:
+       print(resp)
 
 if __name__ == "__main__":
-    main()
+   main()
 
-
-
-
-
-
-
- 
