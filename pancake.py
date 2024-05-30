@@ -1,69 +1,53 @@
-def pancake ():
-    x= 1
-    return x
-
-# Posible codigo para pancakeSort
 def flip(arr, i):
     start = 0
     while start < i:
-        temp = arr[start]
-        arr[start] = arr[i]
-        arr[i] = temp
+        arr[start], arr[i] = arr[i], arr[start]
         start += 1
         i -= 1
- 
-# Returns index of the maximum
-# element in arr[0..n-1] */
-def findMax(arr, n):
+
+def find_max(arr, n):
     mi = 0
-    for i in range(0,n):
+    for i in range(1, n):
         if arr[i] > arr[mi]:
             mi = i
     return mi
+
+def pancake_sort(arr):
+    flips = []
+    n = len(arr)
+    for curr_size in range(n, 1, -1):
+        mi = find_max(arr, curr_size)
+        if mi!= curr_size - 1:
+            if mi!= 0:
+                flip(arr, mi)
+                flips.append(mi + 1)  # 1-based index
+            flip(arr, curr_size - 1)
+            flips.append(curr_size)  # 1-based index
+    flips.append(0)  # To mark the end of the sequence
+    return flips
+
+def main():
+    num_cases = int(input())
+    results = []
+
+    for _ in range(num_cases):
+        pancakes = list(map(int, input().split()))
+        if pancakes == sorted(pancakes, reverse=True):
+            results.append("ORDENADO")
+        else:
+            flips = pancake_sort(pancakes)
+            results.append(" ".join(map(str, flips)))
+
+    for result in results:
+        print(result)
+
+if __name__ == "__main__":
+    main()
+
+
+
+
+
+
+
  
-# The main function that 
-# sorts given array 
-# using flip operations
-def pancakeSort(arr, n):
-     
-    # Start from the complete
-    # array and one by one
-    # reduce current size
-    # by one
-    curr_size = n
-    while curr_size > 1:
-        # Find index of the maximum
-        # element in 
-        # arr[0..curr_size-1]
-        mi = findMax(arr, curr_size)
- 
-        # Move the maximum element
-        # to end of current array
-        # if it's not already at 
-        # the end
-        if mi != curr_size-1:
-            # To move at the end, 
-            # first move maximum 
-            # number to beginning 
-            flip(arr, mi)
- 
-            # Now move the maximum 
-            # number to end by
-            # reversing current array
-            flip(arr, curr_size-1)
-        curr_size -= 1
- 
-# A utility function to 
-# print an array of size n 
-def printArray(arr, n):
-    for i in range(0,n):
-        print ("%d"%( arr[i]),end=" ")
- 
-# Driver program 
-arr = [23, 10, 20, 11, 12, 6, 7]
-n = len(arr)
-pancakeSort(arr, n);
-print ("Sorted Array ")
-printArray(arr,n)
- 
-# This code is contributed by shreyanshi_arun.
